@@ -3,10 +3,11 @@ from selenium.webdriver.common.by import By
 class BasePageLocators():
     LOGIN_LINK = (By.CSS_SELECTOR, "#login_link")
     LOGIN_LINK_INVALID = (By.CSS_SELECTOR, "#login_link_inc")
+    BASKET_LINK = (By.CSS_SELECTOR, ".btn-group > a")
 
 
-class MainPageLocators():
-    LOGIN_LINK = (By.CSS_SELECTOR, "#login_link")
+class BasketPageLocators():
+    BASKET_NOT_EMPTY = (By.CLASS_NAME, "basket-items")
 
 
 class LoginPageLocators():
@@ -15,6 +16,10 @@ class LoginPageLocators():
     REGISTRATION_EMAIL_FIELD = (By.CSS_SELECTOR, "#id_registration-email")
     REGISTRATION_PASSWORD1_FIELD = (By.CSS_SELECTOR, "#id_registration-password1")
     REGISTRATION_PASSWORD2_FIELD = (By.CSS_SELECTOR, "#id_registration-password2")
+
+
+class MainPageLocators():
+    LOGIN_LINK = (By.CSS_SELECTOR, "#login_link")
 
 
 class ProductPageLocators:
