@@ -1,4 +1,8 @@
 import pytest
+import random
+
+from conftest import browser
+from pages.basket_page import BasketPage
 from pages.product_page import ProductPage
 from pages.login_page import LoginPage
 
@@ -53,3 +57,38 @@ def test_guest_can_go_to_login_page_from_product_page(browser):
     login_page = LoginPage(browser, browser.current_url)
     login_page.should_be_login_page()
 
+def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
+    link = 'http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207'
+    page = ProductPage(browser, link)
+    page.open()
+    page.go_to_basket()
+    basket_page = BasketPage(browser, browser.current_url)
+    basket_page.check_if_basket_not_empty()
+
+class TestUserAddToBasketFromProductPage:
+    @pytest.fixture(scope="function", autouse=True)
+    def setup(self, browser):
+        user_email = f'{random.randint(pow(10, 7), pow(10, 8))}@gmail.com'
+        user_password = f'{random.randint(pow(10, 8), pow(10, 9))}'
+        link = 'http://selenium1py.pythonanywhere.com/ru/accounts/login'
+        page = LoginPage(browser, link)
+        page.open()
+        page.register_new_user(user_email, user_password)
+        page.should_be_authorized_user()
+
+    def test_user_cant_see_success_message(self, browser):
+        link = 'http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207'
+        page = ProductPage(browser, link)
+        page.open()
+        page.should_not_be_success_message()
+
+    def test_user_can_add_product_to_basket(self, browser):
+        link = f"http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207"
+        page = ProductPage(browser, link)
+        page.open()
+        product_name = page.get_product_name()
+        product_price = page.get_product_price()
+        page.should_be_add_to_basket_link()
+        page.add_to_basket()
+        page.check_product_name(product_name)
+        page.check_product_price(product_price)
